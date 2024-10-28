@@ -14,7 +14,9 @@ import regex as re
 # Import Text Processing Libraries
 import spacy as spacy
 # Next is for the pipeline
-nlp = spacy.load("en_core_sci_sm")
+# nlp = spacy.load("en_core_sci_sm")
+import en_core_web_sm
+nlp = en_core_web_sm.load()
 
 ''' Function to detect acronyms'''
 # https://github.com/allenai/scispacy#abbreviationdetector
@@ -42,6 +44,10 @@ def CheckAbre(text):
 if __name__ ==  '__main__':
     
     DIR=sys.argv[1]
+    DIR2=sys.argv[2]
+    
+    print(DIR)
+    print(DIR2)
     
     with open(DIR,encoding="utf-8") as ewe:
         TXT=ewe.read()
@@ -50,7 +56,8 @@ if __name__ ==  '__main__':
     
     ABR=CheckAbre(TXT)
     
-    ABR.to_csv("C:\Dropbox\TU_Delft\Projects\Floods_CCA\PROCESSED\Temporal.csv")
+    
+    ABR.to_csv(DIR2)
     
 
 

@@ -11,7 +11,9 @@ import sys
 # Import Text Processing Libraries
 import spacy as spacy
 # Next is for the pipeline
-nlp = spacy.load('en_core_web_sm') # Small English language model
+# nlp = spacy.load('en_core_web_sm') # Small English language model
+import en_core_web_sm
+nlp = en_core_web_sm.load()
 import neuralcoref
 neuralcoref.add_to_pipe(nlp)
 
