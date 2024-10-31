@@ -22,7 +22,7 @@
 #   - Python 3.11
 # 
 # Conda Environment to run the code:
-#   - @SofiaG1L/NLP4LitRev/PY_ENVIRONMENT/pytorch_textacy.yml
+#   - @SofiaG1L/Database_CCA/PY_ENVIRONMENT/pytorch_textacy.yml
 #
 ##################################
 """
@@ -56,7 +56,6 @@ import spacy as spacy
 # Functions
 # =============================================================================
 os.chdir("@SofiaG1L/NLP4LitRev//MainFunctions/")
-
 import Functions as FN
 
 # Function to remove unspected characters and strings
@@ -72,7 +71,7 @@ def normalize(text):
 # Cleaning data to merge the metadata with the files info
 # =============================================================================
 #### This is the code for Data <=August 2022 ####
-DIRF="C:\Dropbox\TU_Delft\Projects\ML_FindingsGrammar\DATA\ASREVIEW_CSV"
+DIRF="@SofiaG1l/Database_CCA/PROCESSED/SCOPUS_DATA/ASREVIEW_CSV"
 FOLDERS1=os.listdir(DIRF)
 FOLDERS1=[x for x in FOLDERS1 if x.find("csv")>-1]
 
@@ -87,20 +86,20 @@ SCOPUS1.head()
 SCOPUS1=SCOPUS1.reset_index(drop=True)
 SCOPUS1=SCOPUS1[['clusters2','dc:identifier','doi','FILE_NAME']]
 
-with open('C:\\Dropbox\\TU_Delft\\.Final_Deliverables\\DATA\\1_RAW_DATA\\4_SCOPUSwARTICLES\\SCOPUSwArt_August2022.pickle', 'rb') as handle:
+with open('@SofiaG1l/Database_CCA/PROCESSED/SCOPUS_DATA/4_SCOPUSwARTICLES/SCOPUSwArt_August2022.pickle', 'rb') as handle:
     DT1_org1 = pickle.load(handle)
 DT1_org1=pd.merge(DT1_org1,SCOPUS1, left_on=['dc:identifier', 'prism:doi'], right_on=['dc:identifier', 'doi'])
 DT1_org1['period']="<Aug,2022"
 
 #### This is the code for Data August 2022 - January 2024 ####
-SCOPUS2=pd.read_csv("C:\\Dropbox\\TU_Delft\\Projects\\DataBase\\PROCESSED\\SCOPUS_DATA\\asreview_dataset_relevant_UpdatedDatabaseJan2024.csv",
+SCOPUS2=pd.read_csv("@SofiaG1l/Database_CCA/PROCESSED/SCOPUS_DATA/asreview_dataset_relevant_UpdatedDatabaseJan2024.csv",
                    encoding="utf-8")
 SCOPUS2=SCOPUS2[pd.isna(SCOPUS2.FILE_NAME)==False]
 SCOPUS2=SCOPUS2.reset_index(drop=True)
 SCOPUS2=SCOPUS2[['dc:identifier','doi','FILE_NAME']]
 SCOPUS2['clusters2']=None
 
-with open('C:\\Dropbox\\TU_Delft\\.Final_Deliverables\\DATA\\1_RAW_DATA\\4_SCOPUSwARTICLES\\SCOPUSwArt_Aug2022_Feb2024.pickle', 'rb') as handle:
+with open('@SofiaG1l/Database_CCA/PROCESSED/SCOPUS_DATA/SCOPUSwArt_Aug2022_Feb2024.pickle', 'rb') as handle:
     DT1_org2 = pickle.load(handle)
 DT1_org2=pd.merge(DT1_org2,SCOPUS2, left_on=['dc:identifier', 'prism:doi'], right_on=['dc:identifier', 'doi'])
 DT1_org2['period']="Aug,2022-Feb,2024"

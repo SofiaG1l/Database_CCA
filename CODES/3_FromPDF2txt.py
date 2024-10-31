@@ -22,7 +22,7 @@
 #   - Python 3.11
 # 
 # Conda Environment to run the code:
-#   - @SofiaG1L/NLP4LitRev/PY_ENVIRONMENT/pdf2text.yml
+#   - @SofiaG1L/Database_CCA/PY_ENVIRONMENT/pdf2text.yml
 #
 ##################################
 """
@@ -30,22 +30,24 @@
 # =============================================================================
 # Packages
 # =============================================================================
-import pdfminer
 from pdfminer.high_level import extract_text
 import os as os
 
 
 # =============================================================================
-# Main
+# Transforming PDFs to text files depending on the data batch:
 # =============================================================================
 
-DIR="@SofiaG1l/Database_CCA/PROCESSED/SCOPUS_DATA/"
-
+## Data <=August 2022
+DIR="@SofiaG1l/Database_CCA/PROCESSED/SCOPUS_DATA/PDFs_Clusters/"
 FOLDERS=os.listdir(DIR)
+FOLDERS=[x for x in FOLDERS if x.find("Cluster")>-1]
 
+## Data August 2022 - January 2024
+DIR="@SofiaG1l/Database_CCA/PROCESSED/SCOPUS_DATA/"
 FOLDERS=["pdfs"]
 
-for efe in FOLDERS: # ['Here']
+for efe in FOLDERS: 
     # break
     FILES=os.listdir(DIR+efe)
     FILES=[f for f in FILES if f.find(".pdf")>0]
@@ -59,6 +61,8 @@ for efe in FOLDERS: # ['Here']
         # break
         with open(directory+"\\"+fi[:-3]+"txt","w", encoding="utf-8") as ewe:
             ewe.write(PDF)
+
+
 
 
 

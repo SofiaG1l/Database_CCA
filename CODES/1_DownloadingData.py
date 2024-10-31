@@ -22,7 +22,7 @@
 #   - Python 3.11
 # 
 # Conda Environment to run the code:
-#   - @SofiaG1L/NLP4LitRev/PY_ENVIRONMENT/elsapy_0.yml
+#   - @SofiaG1L/Database_CCA/PY_ENVIRONMENT/elsapy_0.yml
 #
 ##################################
 """
