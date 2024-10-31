@@ -29,52 +29,28 @@
 
 import os as os
 import subprocess
-import glob
-from datetime import date
 
-from tqdm import tqdm
-
-# Saving Data into SQL
-import sqlite3
 import pickle
 
 # Data Handling
 import pandas as pd
+from tqdm import tqdm
 tqdm.pandas(desc="my bar!")
-import csv
 pd.set_option('display.max_columns', 500) # Display any number of columns
 pd.set_option('display.max_rows',500) # Display any number of rows
 
-# Transform list representation into list
-import ast 
-
-# Network Analysis
-import networkx as nx
-
-# Basic XXX Libraries
+# Basic Libraries
 import numpy as np
 from collections import Counter
-import random
 
 # Processing text
-import nltk as nltk
 import regex as re
-from bs4 import BeautifulSoup
 
 # Import Text Processing Libraries
 import textacy.preprocessing as tprep
 # from textacy.extract import keyword_in_context as KWIC
 import spacy as spacy
-# Next is to tokenize
-from spacy.tokenizer import Tokenizer
-from spacy.util import compile_prefix_regex,compile_infix_regex, compile_suffix_regex
-# Next is for the pipeline
-# nlp = spacy.load('en_core_web_trf') # Small English language model
 
-# Plots 
-# from wordcloud import WordCloud
-from matplotlib import pyplot as plt
-# import seaborn as sns
 
 # =============================================================================
 # Functions
@@ -82,9 +58,8 @@ from matplotlib import pyplot as plt
 os.chdir("@SofiaG1L/NLP4LitRev//MainFunctions/")
 
 import Functions as FN
-import DataViz as DV
 
-
+# Function to remove unspected characters and strings
 def normalize(text):
     text=tprep.normalize.hyphenated_words(text)
     text=tprep.normalize.quotation_marks(text)
