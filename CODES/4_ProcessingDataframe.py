@@ -140,17 +140,12 @@ DT1_org2.index=DT1_org2['FILE_NAME']
 # Openning and cleaning the text
 # =============================================================================
 
-# DIR="C:\\Dropbox\\TU_Delft\\FromTatiana\\Erwin-Florence-Wieke project\\"
-
 ### Data < August 2022
-DIR1="C:\\Dropbox\\TU_Delft\\Projects\\ML_FindingsGrammar\\DATA\\PDFs_Clusters\\TXT\\" # !!!
+DIR1="@SofiaG1l/Database_CCA/PROCESSED/SCOPUS_DATA/PDFs_Clusters/TXT/" # !!!
 
 ### Data August 2022 - January 2024
-DIR2="C:\\Dropbox\\TU_Delft\\Projects\\DataBase\\PROCESSED\\SCOPUS_DATA\\TXT\\" # !!!
+DIR2="@SofiaG1l/Database_CCA/PROCESSED/SCOPUS_DATA/TXT/" # !!!
 
-
-# This DB is for the 2nd version methods paper
-# DIR="C:\\Dropbox\\TU_Delft\\Projects\\Unsupervised\\Version2\\Paper2Compare\\TXT\\" 
 
 ### Data < August 2022
 FOLDERS1=os.listdir(DIR1)
@@ -183,8 +178,9 @@ for efe in FOLDERS1+FOLDERS2:
                 dc_identifier=vals["dc:identifier"]
                 doi=vals["prism:doi"]
             # Replacing abreviations with meanings
-            subprocess.run('conda run -n scispacy python ".\FindAbreviations.py" "'+efe+"\\"+fi+'"',shell=True, check=True)
-            ABR=pd.read_csv("C:\Dropbox\TU_Delft\Projects\Floods_CCA\PROCESSED\Temporal.csv")
+            subprocess.run('conda run -n scispacy python "@SofiaG1L/Database_CCA/MainFunctions/FindAbreviations.py" "'+\
+                           efe+"\\"+fi+'"',shell=True, check=True)
+            ABR=pd.read_csv("@SofiaG1L/NLP4LitRev/MainFunctions/PROCESSED/Temporal.csv")
             
             with open(efe+"\\"+fi,encoding="utf-8") as ewe:
                 TXT=ewe.read()
@@ -287,10 +283,6 @@ df["FILE_NAME"]=df["FILE_NAME"].apply(lambda x: x[0] if type(x)!=str else x)
 df["dc:identifier"]=df["dc:identifier"].apply(lambda x: x[0] if type(x)!=str else x)
 df["prism:doi"]=df["prism:doi"].apply(lambda x: x[0] if type(x)==pd.core.series.Series else x)
 
-# check=re.sub("[^0-9a-z\(\)\n]+"," ",DT1.introduction.iloc[103])
-# re.sub("\([a-z\s]+ (;|,|\s|)[0-9]+\)","XXX",check)
-# [c for c,ii in enumerate(df.conclusions) if not pd.isna(ii) and ii[0].find("ndings")>-1]
-# !! re.sub(r'\n?\n'," ",df.conclusions.iloc[0][0])
 # Cleaning each column
 for i in df.columns[5:]:
     try:
@@ -312,9 +304,6 @@ for i in df.columns[5:]:
     # Removing anything between parentheses and the parentheses
     df[i]=[re.sub("[\(\[].*?[\)\]]", "", kk) for kk in df[i]]
     
-## Number of articles up to here:
-##   
-
 
 # =============================================================================
 # Merging with Metadata
@@ -327,7 +316,6 @@ df2=df2.reset_index(drop=True)
 # =============================================================================
 # Cleaning Title
 # =============================================================================
-
 # Removing journals mark
 df2['dc:title']=df2['dc:title'].apply(normalize)
 df2['dc:title']=[re.sub("(\s|)[^0-9a-z\(\).,;:-]+"," ",kk.lower()) for kk in df2['dc:title']] 
@@ -383,10 +371,6 @@ df2['description']=[re.sub(r'(?<=[.,:;])(?=[^\s])', r' ', kk) for kk in df2['des
 # Adding descriptive columns
 # =============================================================================
 
-#### Affiliation Country ####
-# df2['affiliation']=df2.affiliation.apply(lambda x: x if not pd.isna(x) else '')
-# df2['affiliation']=df2['affiliation'].apply(lambda x: eval(x) if x!='' else [])
-
 df2.affiliation.iloc[3][0]['affiliation-country']
 
 AFF=[]
@@ -412,13 +396,13 @@ df2['affiliation_Country']=AFF
 #### Studied Countries ####
 
 ## Opening file with possible names
-CITIES=pd.read_csv("C:/Dropbox/TU_Delft/Projects/Farmers_CCA/DATA/world-cities_csv.csv")
+CITIES=pd.read_csv("@SofiaG1l/Database_CCA/DATA/world-cities_csv.csv")
 CITIES=CITIES.fillna("")
 for cc in CITIES.columns[:-1]:
     CITIES[cc]= CITIES[cc].apply(lambda x: normalize(x.lower()))
 
 ## Opening file with possible names
-NATIONALITIES=pd.read_csv("C:/Dropbox/TU_Delft/Projects/Farmers_CCA/DATA/Nationalities.csv")
+NATIONALITIES=pd.read_csv("@SofiaG1l/Database_CCA/DATA/Nationalities.csv")
 NATIONALITIES=NATIONALITIES.fillna("")
 for cc in NATIONALITIES.columns:
     NATIONALITIES[cc]= NATIONALITIES[cc].apply(lambda x: normalize(x.lower()))
@@ -515,21 +499,21 @@ for cc in tqdm(range(COUNTRIES.shape[0])):
     if  COUNTRIES.ISO2.iloc[cc]=="Unknown":
         C=COUNTRIES.Country.iloc[cc].lower()
         if C in list(DICT_PLC.keys()): # If the country is in the dictionary
-            text0=get_continent(DICT_PLC[C].title())
+            text0=FN.get_continent(DICT_PLC[C].title())
             COUNTRIES["ISO2"].iloc[cc]=text0[0]
             COUNTRIES["Continent"].iloc[cc]=text0[1]
         elif (FN.CheckSubCountry(C,CITIES)).shape[0]>0:  # Checking the region and returning the country
             SUB=FN.CheckSubCountry(C,CITIES)
             SUB=Counter(SUB.country).most_common(1)
             if len(SUB)>0:
-                text0=get_continent(SUB[0][0].title())
+                text0=FN.get_continent(SUB[0][0].title())
                 COUNTRIES["ISO2"].iloc[cc]=text0[0]
                 COUNTRIES["Continent"].iloc[cc]=text0[1]
         else: # Checking the city and returning the country
-            SUB=CheckCities(C,CITIES)
+            SUB=FN.CheckCities(C,CITIES)
             SUB=Counter(SUB.country).most_common(1)
             if len(SUB)>0:
-                text0=get_continent(SUB[0][0].title())
+                text0=FN.get_continent(SUB[0][0].title())
                 COUNTRIES["ISO2"].iloc[cc]=text0[0]
                 COUNTRIES["Continent"].iloc[cc]=text0[1]
 
@@ -578,7 +562,7 @@ NON=[n for n,i in enumerate(df2.StudiedPlace_ISO2) if len(i)==0]
 len(NON)
 
 ## Checking if the region is in the title or abstract for the NONs
-REGIONS=pd.read_csv("C:/Dropbox/TU_Delft/Projects/Farmers_CCA/DATA/Just_Regions.csv")
+REGIONS=pd.read_csv("@SofiaG1l/Database_CCA/DATA/Just_Regions.csv")
 
 for cc in REGIONS.columns:
     REGIONS[cc]=REGIONS[cc].str.lower()
@@ -598,7 +582,7 @@ NON=[n for n,i in enumerate(df2.StudiedPlace_Continent) if len(i)==0]
 len(NON)
 
 #### Adding type of CC hazard ####
-HZD_DICT=pd.read_csv("C:/Dropbox/TU_Delft/Projects/Farmers_CCA/DATA/Hazards_Dict.csv")
+HZD_DICT=pd.read_csv("@SofiaG1l/Database_CCA/DATA/Hazards_Dict.csv")
 
 df2["HAZARD"]=""
 
@@ -622,7 +606,7 @@ for ii in range(df2.shape[0]):
 sum(df2["HAZARD"]!="")
          
 #### Type of Study: Qualy vs Quanty ####
-STD_DICT=pd.read_csv("C:/Dropbox/TU_Delft/Projects/Farmers_CCA/DATA/Qualitative.csv")
+STD_DICT=pd.read_csv("@SofiaG1l/Database_CCA/DATA/Qualitative.csv")
 
 df2["TypeMethod"]=""
 df2["TypeMethod_RGX"]=""
@@ -656,9 +640,9 @@ for ii in range(df2.shape[0]):
 
 df2[df2["TypeMethod_RGX"]==""].shape
 
-# with open('C:\\Dropbox\\TU_Delft\\Projects\\DataBase\\PROCESSED\\df2.pickle', 'wb') as handle:
+# with open('@SofiaG1l/Database_CCA/PROCESSED/df2.pickle', 'wb') as handle:
 #     pickle.dump(df2, handle, protocol=pickle.HIGHEST_PROTOCOL)
 
-# with open('C:\\Dropbox\\TU_Delft\\Projects\\DataBase\\PROCESSED\\df2.pickle', 'rb') as handle:
+# with open('@SofiaG1l/Database_CCA/PROCESSED/df2.pickle', 'rb') as handle:
 #     df2 = pickle.load(handle)
 
