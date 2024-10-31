@@ -1,8 +1,30 @@
 # -*- coding: utf-8 -*-
-"""
-Created on Wed Jan 25 12:01:19 2023
 
-@author: sgilclavel
+"""
+##################################
+# 
+# Author: Dr. Sofia Gil-Clavel
+# 
+# Last update: October 31st, 2024.
+# 
+# Description: Script to clean the text, as explained in:
+#   - Gil-Clavel, S., Wagenblast, T., Akkerman, J., & Filatova, T. (2024, April 26). 
+#       Patterns in Reported Adaptation Constraints: Insights from Peer-Reviewed 
+#       Literature on Flood and Sea-Level Rise. https://doi.org/10.31235/osf.io/3cqvn
+#   - Gil-Clavel, S., Wagenblast, T., & Filatova, T. (2023, November 24). Incremental
+#       and Transformational Climate Change Adaptation Factors in Agriculture Worldwide:
+#       A Natural Language Processing Comparative Analysis. 
+#       https://doi.org/10.31235/osf.io/3dp5e
+# 
+# Computer Environment:
+#   - Windows 
+#   - Microsoft Windows 10 Enterprise
+#   - Python 3.11
+# 
+# Conda Environment to run the code:
+#   - @SofiaG1L/NLP4LitRev/PY_ENVIRONMENT/pytorch_textacy.yml
+#
+##################################
 """
 
 import os as os
@@ -57,11 +79,10 @@ from matplotlib import pyplot as plt
 # =============================================================================
 # Functions
 # =============================================================================
-os.chdir("C:\\Dropbox\\TU_Delft\\Projects\\ML_FindingsGrammar\\CODE\\Processing_PDFs\\")
+os.chdir("@SofiaG1L/NLP4LitRev//MainFunctions/")
 
 import Functions as FN
 import DataViz as DV
-# import Text_2_Net as NT2
 
 
 def normalize(text):

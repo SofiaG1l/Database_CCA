@@ -1,8 +1,30 @@
 # -*- coding: utf-8 -*-
-"""
-Created on Tue Jul 12 16:03:24 2022
 
-@author: sofia
+"""
+##################################
+# 
+# Author: Dr. Sofia Gil-Clavel
+# 
+# Last update: October 31st, 2024.
+# 
+# Description: Script to download the data using Scopus, ELSEVIER. As explained in:
+#   - Gil-Clavel, S., Wagenblast, T., Akkerman, J., & Filatova, T. (2024, April 26). 
+#       Patterns in Reported Adaptation Constraints: Insights from Peer-Reviewed 
+#       Literature on Flood and Sea-Level Rise. https://doi.org/10.31235/osf.io/3cqvn
+#   - Gil-Clavel, S., Wagenblast, T., & Filatova, T. (2023, November 24). Incremental
+#       and Transformational Climate Change Adaptation Factors in Agriculture Worldwide:
+#       A Natural Language Processing Comparative Analysis. 
+#       https://doi.org/10.31235/osf.io/3dp5e
+# 
+# Computer Environment:
+#   - Windows 
+#   - Microsoft Windows 10 Enterprise
+#   - Python 3.11
+# 
+# Conda Environment to run the code:
+#   - @SofiaG1L/NLP4LitRev/PY_ENVIRONMENT/elsapy_0.yml
+#
+##################################
 """
 
 from elsapy.elsclient import ElsClient
@@ -29,7 +51,7 @@ from tqdm import tqdm
 # https://dev.elsevier.com/sc_search_tips.html
 
 ## Load configuration
-con_file = open("config.json") # Data <=August 2022 
+con_file = open("config.json") 
 config = json.load(con_file)
 con_file.close()
 
@@ -105,18 +127,11 @@ Search_Terms={
 # =============================================================================
 # Scopus
 # =============================================================================
-with open('C:\Dropbox\TU_Delft\Projects\CCA_Constraints\Replicate_CCAconstraints\PROCESSED\SCOPUS_DATA\ARTS\doc_srch.pickle', 'rb') as handle:
-    df1 = pickle.load(handle)
-
-with open('C:\Dropbox\TU_Delft\Projects\CCA_Constraints\Replicate_CCAconstraints\PROCESSED\SCOPUS_DATA\ENVI\doc_srch.pickle', 'rb') as handle:
-    df2 = pickle.load(handle)
-
-df2["query"].iloc[14168]
 
 ## Saving the "prism:url" to not repeat those entrances
-PRISM_URL=set(list(df1['prism:url'])+list(df2['prism:url']))
+PRISM_URL=set()
 
-DIR="PROCESSED\\SCOPUS_DATA\\"
+DIR="@SofiaG1l/Database_CCA/PROCESSED/SCOPUS_DATA/"
 
 ## Loop to retrieve the data
 for k,v in Search_Terms.items():
@@ -201,9 +216,6 @@ for k,v in Search_Terms.items():
                                         pickle.dump(DATA1, handle, protocol=pickle.HIGHEST_PROTOCOL)
                             
 
-# # Read JSON file
-# with open(DIR+newpath+"doi_docs.json") as data_file:
-#     data_loaded = json.load(data_file)
 
 # =============================================================================
 # ## Joining all the data by field
@@ -261,16 +273,6 @@ DT1=DT1.reset_index(drop=True)
 
 with open(DIR+"doc_srch_all.pickle", 'wb') as handle:
     pickle.dump(DT1, handle, protocol=pickle.HIGHEST_PROTOCOL)
-
-# =============================================================================
-# ## Some descriptive stats
-# =============================================================================
-
-import matplotlib as plt
-
-DT1['prism:coverDate']=DT1['prism:coverDate'].astype("datetime64[ns]")
-
-DT1['prism:coverDate'].groupby(DT1['prism:coverDate'].dt.year).count().plot(kind="bar")
 
 
 
